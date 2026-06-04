@@ -1,0 +1,50 @@
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+
+> zyra-counselor-action-center@1.0.0 test
+> npm run test --prefix backend && npm run test --prefix frontend
+
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+
+> zyra-action-center-api@1.0.0 test
+> vitest run
+
+
+ RUN  v3.2.6 /Users/kartiekeybhardwaj/kartik/Manthan_asignment/backend
+
+stdout | tests/api.integration.test.ts > Action Center API > GET /students/stu_001/action-center returns aggregated counselor view
+{"level":"info","type":"http","requestId":"8ffb0145-2ae2-4533-97ea-999ae0787970","method":"GET","path":"/students/stu_001/action-center","status":200,"durationMs":9,"timestamp":"2026-06-04T02:37:34.418Z"}
+
+stdout | tests/api.integration.test.ts > Action Center API > GET /students/unknown/action-center returns 404 with request id
+{"level":"info","type":"http","requestId":"ea0db1d5-fcec-44b8-a5d8-cd69c15073cc","method":"GET","path":"/students/stu_999/action-center","status":404,"durationMs":1,"timestamp":"2026-06-04T02:37:34.422Z"}
+
+stdout | tests/api.integration.test.ts > Action Center API > PATCH /tasks/:id/status updates task and persists in subsequent GET
+{"level":"info","type":"http","requestId":"dfd5004d-e692-4551-8cda-d24e9880d6de","method":"PATCH","path":"/tasks/tsk_001/status","status":200,"durationMs":0,"timestamp":"2026-06-04T02:37:34.429Z"}
+
+stdout | tests/api.integration.test.ts > Action Center API > PATCH /tasks/:id/status updates task and persists in subsequent GET
+{"level":"info","type":"http","requestId":"14c09358-6c1a-467d-ad5e-57a12319086a","method":"GET","path":"/students/stu_001/action-center","status":200,"durationMs":0,"timestamp":"2026-06-04T02:37:34.431Z"}
+
+stdout | tests/api.integration.test.ts > Action Center API > PATCH /tasks/invalid/status with bad body returns 400
+{"level":"info","type":"http","requestId":"1d62d30f-c6a1-4e96-a599-f86fee96762a","method":"PATCH","path":"/tasks/tsk_001/status","status":400,"durationMs":1,"timestamp":"2026-06-04T02:37:34.433Z"}
+
+ ✓ tests/api.integration.test.ts (4 tests) 32ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  08:07:34
+   Duration  416ms (transform 52ms, setup 0ms, collect 167ms, tests 32ms, environment 0ms, prepare 46ms)
+
+npm warn Unknown env config "devdir". This will stop working in the next major version of npm.
+
+> zyra-action-center-web@1.0.0 test
+> vitest run
+
+
+ RUN  v3.2.6 /Users/kartiekeybhardwaj/kartik/Manthan_asignment/frontend
+
+ ✓ src/components/StudentProfile.test.tsx (1 test) 44ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  08:07:34
+   Duration  655ms (transform 45ms, setup 40ms, collect 78ms, tests 44ms, environment 293ms, prepare 35ms)
+
