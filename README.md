@@ -148,6 +148,34 @@ npm run test:watch --prefix frontend
 
 ---
 
+## Performance Decisions & Tradeoffs
+
+### Single aggregated endpoint (`GET /students/:id/action-center`)
+
+The action-center endpoint joins student, tasks, and messages server-side and returns everything in **one round-trip**. This avoids waterfall fetches on the frontend (e.g., fetch student → fetch tasks → fetch messages) and keeps the UI responsive. The tradeoff is a slightly heavier response payload, but for a counselor viewing one student at a time, this is negligible compared to the latency saved.
+
+### Server-side urgency computation
+
+Urgency level and reasons are computed **on the backend** rather than the frontend. This ensures every counselor sees the same priority logic regardless of client-side clock differences or stale caches. The scoring algorithm (open tasks, overdue status, enrollment risk, unread count) lives in `services/urgency.ts` as a single source of truth. The tradeoff is that urgency doesn't update in real-time on the client without re-fetching, but `invalidateQueries` after task mutations keeps it in sync.
+
+### Optimistic updates with rollback
+
+Task status changes use TanStack Query's `onMutate` to **instantly update the UI cache** before the PATCH request completes. If the request fails, `onError` restores the previous state, and `onSettled` reconciles with the server. This makes the UI feel instant while maintaining data integrity. The tradeoff is added complexity in the mutation handler, but it significantly improves perceived performance.
+
+### Request ID middleware
+
+Every request gets a UUID (`X-Request-Id`) that flows through logging and error responses. This enables **end-to-end tracing** — a counselor reporting an issue can share the request ID, and we can correlate it across logs instantly. The overhead is one `uuid()` call per request (< 1ms).
+
+### App factory pattern (`createApp()`)
+
+The Express app is created via a factory function rather than a module-level singleton. This allows integration tests to create a fresh app instance and hit the real middleware stack **without binding a port**. The tradeoff is that the current mock data is module-level (shared across tests), which means test order can matter for mutations — a known limitation documented in the architecture notes.
+
+### In-memory mock data
+
+Data is stored in a plain TypeScript array rather than a database. This keeps the assessment focused on API design and frontend integration without infrastructure overhead. For production, this would be replaced with MongoDB repositories behind the same service interface — the frontend contract would not change.
+
+---
+
 ## Build for Production
 
 ```bash
